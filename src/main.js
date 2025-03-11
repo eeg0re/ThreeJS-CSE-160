@@ -8,20 +8,57 @@ const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 const boxWidth = 1;
 const boxHeight = 1;
 const boxDepth = 1;
+const canvas = document.querySelector('#c');
+const renderer = new THREE.WebGLRenderer({canvas});
+const scene = new THREE.Scene();
+let cubes = [];
+camera.position.z = 2;
+
+let cube;
+
+function render(time){
+    time *= 0.001;  // convert time to seconds
+
+    cubes.forEach((cube, ndx) => {
+        const speed = 1 + ndx * .1;
+        const rot = time * speed;
+        cube.rotation.x = rot;
+        cube.rotation.y = rot;
+    });
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+function makeInstance(geometry, color, x){
+    const material = new THREE.MeshPhongMaterial({color});
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+    cube.position.x = x;
+    return cube;
+}
 
 function main(){
-    const canvas = document.querySelector('#c');
-    const renderer = new THREE.WebGLRenderer({canvas});
-    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 2;
-    const scene = new THREE.Scene();
+    // add a cube
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-    const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+    cubes = [
+        makeInstance(geometry, 0x44aa88, 0),
+        makeInstance(geometry, 0x8844aa, -2),
+        makeInstance(geometry, 0xaa8844, 2),
+    ];
 
-    const cube = new THREE.Mesh(geometry, material);
+    // add light
+    const lightColor = 0xFFFFFF;
+    const intensity = 3;
+    const light = new THREE.DirectionalLight(lightColor, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
 
-    scene.add(cube);
+
     renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
 }
 
 main();

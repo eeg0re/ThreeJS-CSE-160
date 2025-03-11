@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '/node_modules/three/src/Three.js';
 
 const fov = 75;
 const aspect = 2;  // the canvas default
@@ -23,3 +23,5 @@ function main(){
     scene.add(cube);
     renderer.render(scene, camera);
 }
+
+main();

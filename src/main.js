@@ -51,9 +51,19 @@ function loadTexture(texturePath){
 }
 
 function makeWorld(){
+    // set up texture for the ground
+    const groundTexture = loadTexture('/images/topGrass.jpg');
+    groundTexture.wrapS = THREE.RepeatWrapping;
+    groundTexture.wrapT = THREE.RepeatWrapping;
+    groundTexture.magFilter = THREE.NearestFilter;
+    groundTexture.colorSpace = THREE.SRGBColorSpace;
+    const repeats = planeSize / 2;
+
     const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-    const planeMat = new THREE.MeshPhongMaterial({color: 0x999999, side: THREE.DoubleSide});
+    const planeMat = new THREE.MeshPhongMaterial({map: groundTexture, side: THREE.DoubleSide});
     const planeMesh = new THREE.Mesh(planeGeo, planeMat);
+
+    groundTexture.repeat.set(repeats, repeats);
     planeMesh.rotation.x = Math.PI * -.5;
     scene.add(planeMesh);
 }

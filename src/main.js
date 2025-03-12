@@ -1,9 +1,10 @@
-import * as THREE from '/node_modules/three/src/Three.js';
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
-const fov = 75;
+const fov = 45;
 const aspect = 2;  // the canvas default
 const near = 0.1;
-const far = 5;
+const far = 100;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 const boxWidth = 1;
 const boxHeight = 1;
@@ -13,6 +14,11 @@ const renderer = new THREE.WebGLRenderer({canvas});
 const scene = new THREE.Scene();
 let cubes = [];
 camera.position.z = 2;
+const planeSize = 100;
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 5, 0);
+controls.update();
 
 let cube;
 
@@ -39,7 +45,22 @@ function makeInstance(geometry, color, x){
     return cube;
 }
 
+function loadTexture(texturePath){
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(texturePath);
+    return texture;
+}
+
+function makeWorld(){
+    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
+    const planeMat = new THREE.MeshPhongMaterial({color: 0x999999, side: THREE.DoubleSide});
+    const planeMesh = new THREE.Mesh(planeGeo, planeMat);
+    planeMesh.rotation.x = Math.PI * -.5;
+    scene.add(planeMesh);
+}
+
 function main(){
+    makeWorld();
     // add a cube
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     cubes = [

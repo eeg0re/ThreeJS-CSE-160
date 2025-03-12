@@ -47,8 +47,7 @@ function makeInstance(geometry, color, x){
 
 function loadTexture(texturePath){
     const loader = new THREE.TextureLoader();
-    const texture = loader.load(texturePath);
-    return texture;
+    return loader.load(texturePath);
 }
 
 function makeWorld(){
@@ -57,6 +56,18 @@ function makeWorld(){
     const planeMesh = new THREE.Mesh(planeGeo, planeMat);
     planeMesh.rotation.x = Math.PI * -.5;
     scene.add(planeMesh);
+}
+
+function setupLights(){
+    const directColor = 0xFFFFFF;
+    const intensity = 1;
+    const directLight = new THREE.DirectionalLight(directColor, intensity);
+    directLight.position.set(-1, 2, 4);
+    scene.add(directLight);
+
+    const ambientColor = 0xffae99;
+    const ambientLight = new THREE.AmbientLight(ambientColor, intensity);
+    scene.add(ambientLight);
 }
 
 function main(){
@@ -69,13 +80,7 @@ function main(){
         makeInstance(geometry, 0xaa8844, 2),
     ];
 
-    // add light
-    const lightColor = 0xFFFFFF;
-    const intensity = 3;
-    const light = new THREE.DirectionalLight(lightColor, intensity);
-    light.position.set(-1, 2, 4);
-    scene.add(light);
-
+    setupLights();
 
     renderer.render(scene, camera);
 

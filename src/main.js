@@ -8,7 +8,7 @@ const aspect = 2;  // the canvas default
 const near = 0.1;
 const far = 100;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.set(0, 2, 8);
+camera.position.set(0, 3, 8);
 
 const boxWidth = 1;
 const boxHeight = 1;
@@ -22,7 +22,7 @@ let spheres = [];
 const planeSize = 100;
 
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(0, 1, 0);
+controls.target.set(0, 3, 0);
 controls.update();
 
 const loadManager = new THREE.LoadingManager();
@@ -130,7 +130,7 @@ function makeFishTank(){
     const water = new THREE.Mesh(geometry, material);
     water.position.x = 0;
     water.position.y = 5;
-    water.position.z = -5;
+    water.position.z = -6.2;
     scene.add(water);
 
     const glassMaterial = new THREE.MeshPhongMaterial({
@@ -140,25 +140,32 @@ function makeFishTank(){
         specular: 0xFFFFFF,
         shininess: 100,
     });
-    const outerGeometry = new THREE.BoxGeometry(12, 7, 7); // Slightly larger than the water object
-    const glass = new THREE.Mesh(outerGeometry, glassMaterial);
-    // const glass = new THREE.Mesh(geometry, glassMaterial);
-    glass.position.x = 0;
-    glass.position.y = 4;
+
+    const glass = new THREE.Mesh(geometry, glassMaterial);
+    glass.position.y = 5;
     glass.position.z = -5;
-    // glass.scale.x = 12;
-    // glass.scale.y = 7;
-    // glass.scale.z = 7;
+    glass.scale.x = 1.5;
+    glass.scale.y = 1.5;
+    glass.scale.z = 1.5;
     scene.add(glass);
 
-    const backGeometry = new THREE.BoxGeometry(12, 7, 0.1);
-    const aquariumBack = makeCube(backGeometry, 0xAAAAAA, 0, 4, -8.5);
+    const aquariumBack = makeCube(geometry, 0xAAAAAA, 0, 4, -8.5);
+    aquariumBack.scale.x = 1.5;
+    aquariumBack.scale.y = 1.65;
+    aquariumBack.scale.z = 0.05;
+    aquariumBack.position.y = 5;
+    aquariumBack.position.z = -8.8;
 
-    const topGeometry = new THREE.BoxGeometry(12.1, 2, 7.1);
-    const aquariumTop = makeCube(topGeometry, 0xAAAAAA, 0, 8.1, -5);
+    const aquariumTop = makeCube(geometry, 0xAAAAAA, 0, 8.1, -5);
+    aquariumTop.scale.x = 1.51;
+    aquariumTop.scale.y = 0.4;
+    aquariumTop.scale.z = 1.51;
 
-    const bottomGeometry = new THREE.BoxGeometry(12.1, 2.5, 7.1);
-    const aquariumBottom = makeCube(bottomGeometry, 0xAAAAAA, 0, 1.2, -5);
+    const aquariumBottom = makeCube(geometry, 0xAAAAAA, 0, 1.2, -5);
+    aquariumBottom.scale.x = 1.51;
+    aquariumBottom.scale.y = 0.5;
+    aquariumBottom.scale.z = 1.51;
+    aquariumBottom.position.y = 1.3;
 
     return;
 }

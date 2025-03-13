@@ -123,7 +123,7 @@ function makeFishTank(){
     const aquariumTexture = loadTexture('texture', '/images/aquariumBackground.jpg');
     aquariumTexture.wrapS = THREE.RepeatWrapping;
     aquariumTexture.wrapT = THREE.RepeatWrapping;
-    // aquariumTexture.magFilter = THREE.NearestFilter;
+    aquariumTexture.magFilter = THREE.NearestFilter;
 
     const geometry = new THREE.BoxGeometry(10, 5, 5);
     const material = new THREE.MeshBasicMaterial({map: aquariumTexture, side: THREE.DoubleSide});
@@ -142,9 +142,13 @@ function makeFishTank(){
     });
     const outerGeometry = new THREE.BoxGeometry(12, 7, 7); // Slightly larger than the water object
     const glass = new THREE.Mesh(outerGeometry, glassMaterial);
+    // const glass = new THREE.Mesh(geometry, glassMaterial);
     glass.position.x = 0;
     glass.position.y = 4;
     glass.position.z = -5;
+    // glass.scale.x = 12;
+    // glass.scale.y = 7;
+    // glass.scale.z = 7;
     scene.add(glass);
 
     const backGeometry = new THREE.BoxGeometry(12, 7, 0.1);
@@ -157,6 +161,25 @@ function makeFishTank(){
     const aquariumBottom = makeCube(bottomGeometry, 0xAAAAAA, 0, 1.2, -5);
 
     return;
+}
+
+function makeBubbles(sphereCount){
+    const spheresGeo = new THREE.SphereGeometry(1, 32, 32);
+    const globeTexture = loadTexture('texture', '/images/globe.jpg');
+    const globe = makeSphere(false, spheresGeo, globeTexture, 10, 3, 0);
+    scene.add(globe);
+
+    // make some random bubbles
+    for (let i = 0; i < sphereCount; i++){
+        const bubbleSize = Math.random() * 40 + 10; // random size for bubble variety
+        const bubbleGeo = new THREE.SphereGeometry(1, bubbleSize, bubbleSize);
+        let xOffset = Math.random() * 75;
+        let yOffset = Math.random() * 10;
+        let zOffset = Math.random() * 100;
+        const bubbleMode = Math.random() < 0.85; // 15% chance of being a globe
+        const bubble = makeSphere(bubbleMode, bubbleGeo, globeTexture, -25 + xOffset, 2+ yOffset, -50 + zOffset);
+        scene.add(bubble);
+    }
 }
 
 function makeWorld(){
@@ -182,22 +205,7 @@ function makeWorld(){
 
     makeFishTank();
 
-    const spheresGeo = new THREE.SphereGeometry(1, 32, 32);
-    const globeTexture = loadTexture('texture', '/images/globe.jpg');
-    const globe = makeSphere(false, spheresGeo, globeTexture, 10, 3, 0);
-    scene.add(globe);
-
-    // make some random bubbles
-    for (let i = 0; i < 25; i++){
-        const bubbleSize = Math.random() * 20 + 10; // random size for bubble variety
-        const bubbleGeo = new THREE.SphereGeometry(1, bubbleSize, bubbleSize);
-        let xOffset = Math.random() * 75;
-        let yOffset = Math.random() * 10;
-        let zOffset = Math.random() * 100;
-        const bubbleMode = Math.random() < 0.85; // 15% chance of being a globe
-        const bubble = makeSphere(bubbleMode, bubbleGeo, globeTexture, -25 + xOffset, 2+ yOffset, -50 + zOffset);
-        scene.add(bubble);
-    }
+    makeBubbles(30);
 
 }
 
@@ -225,9 +233,9 @@ function main(){
     // add some cubes
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     cubes = [
-        makeCube(geometry, 0x44aa88, 0, 1),
-        makeCube(geometry, 0x8844aa, -2, 1),
-        makeCube(geometry, 0xaa8844, 2, 1),
+        makeCube(geometry, 0x44aa88, 0, 15),
+        makeCube(geometry, 0x8844aa, -2, 15),
+        makeCube(geometry, 0xaa8844, 2, 15),
     ];
 
     setupLights();

@@ -8,7 +8,7 @@ const aspect = 2;  // the canvas default
 const near = 0.1;
 const far = 100;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.set(0, 2, 5);
+camera.position.set(0, 2, 8);
 
 const boxWidth = 1;
 const boxHeight = 1;
@@ -42,12 +42,13 @@ function render(time){
     requestAnimationFrame(render);
 }
 
-function makeCube(geometry, color, x, y){
+function makeCube(geometry, color, x, y, z = 0){
     const material = new THREE.MeshPhongMaterial({color});
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
     cube.position.x = x;
     cube.position.y = y;
+    cube.position.z = z;
     return cube;
 }
 
@@ -89,28 +90,36 @@ function placeOBJ(objPath, mtlPath){
 }
 
 function makeFishTank(){
-    const aquariumTexture = loadTexture('texture', '/images/aquariumBackground2.png');
+    const aquariumTexture = loadTexture('texture', '/images/aquariumBackground.jpg');
     aquariumTexture.wrapS = THREE.RepeatWrapping;
     aquariumTexture.wrapT = THREE.RepeatWrapping;
-    aquariumTexture.magFilter = THREE.NearestFilter;
+    // aquariumTexture.magFilter = THREE.NearestFilter;
 
     const geometry = new THREE.BoxGeometry(10, 5, 5);
     const material = new THREE.MeshBasicMaterial({map: aquariumTexture, side: THREE.DoubleSide});
     const water = new THREE.Mesh(geometry, material);
+    water.position.x = 0;
+    water.position.y = 5;
+    water.position.z = -5;
     scene.add(water);
 
-    water.position.x = 0;
-    water.position.y = 3;
-    water.position.z = -5;
-
     const glassMaterial = new THREE.MeshPhongMaterial({color: 0xFFFFFF, opacity: 0.3, transparent: true});
-    const glassGeometry = new THREE.BoxGeometry(12, 7, 7); // Slightly larger than the water object
-    const glass = new THREE.Mesh(glassGeometry, glassMaterial);
+    const outerGeometry = new THREE.BoxGeometry(12, 7, 7); // Slightly larger than the water object
+    const glass = new THREE.Mesh(outerGeometry, glassMaterial);
     glass.position.x = 0;
     glass.position.y = 4;
     glass.position.z = -5;
-
     scene.add(glass);
+
+    const backGeometry = new THREE.BoxGeometry(12, 7, 0.1);
+    const aquariumBack = makeCube(backGeometry, 0xAAAAAA, 0, 4, -8.5);
+
+    const topGeometry = new THREE.BoxGeometry(12.1, 2, 7.1);
+    const aquariumTop = makeCube(topGeometry, 0xAAAAAA, 0, 8.1, -5);
+
+    const bottomGeometry = new THREE.BoxGeometry(12.1, 2.7, 7.1);
+    const aquariumBottom = makeCube(bottomGeometry, 0xAAAAAA, 0, 1.1, -5);
+
     return;
 }
 
@@ -118,9 +127,6 @@ function makeWorld(){
     const skyboxTexture = loadTexture('cube', ['/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg']);
     skyboxTexture.colorSpace = THREE.SRGBColorSpace;
     scene.background = skyboxTexture;
-
-    // const skyboxTexture = loadTexture('equirect', '/images/skysphere.jpg');
-    // scene.background = skyboxTexture;
 
     // placeOBJ('/sawfish/21864_Sawfish_v1.obj', '/sawfish/Blank.mtl');
 

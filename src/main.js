@@ -133,7 +133,13 @@ function makeFishTank(){
     water.position.z = -5;
     scene.add(water);
 
-    const glassMaterial = new THREE.MeshPhongMaterial({color: 0xFFFFFF, opacity: 0.3, transparent: true});
+    const glassMaterial = new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF, 
+        opacity: 0.3, 
+        transparent: true,
+        specular: 0xFFFFFF,
+        shininess: 100,
+    });
     const outerGeometry = new THREE.BoxGeometry(12, 7, 7); // Slightly larger than the water object
     const glass = new THREE.Mesh(outerGeometry, glassMaterial);
     glass.position.x = 0;
@@ -181,9 +187,17 @@ function makeWorld(){
     const globe = makeSphere(false, spheresGeo, globeTexture, 10, 3, 0);
     scene.add(globe);
 
-    const bubbleGeo = new THREE.SphereGeometry(1, 32, 32);
-    const bubble = makeSphere(true, bubbleGeo, globeTexture, -10, 3, 0);
-    scene.add(bubble);
+    // make some random bubbles
+    for (let i = 0; i < 25; i++){
+        const bubbleSize = Math.random() * 20 + 10; // random size for bubble variety
+        const bubbleGeo = new THREE.SphereGeometry(1, bubbleSize, bubbleSize);
+        let xOffset = Math.random() * 75;
+        let yOffset = Math.random() * 10;
+        let zOffset = Math.random() * 100;
+        const bubble = makeSphere(true, bubbleGeo, globeTexture, -25 + xOffset, 2+ yOffset, -50 + zOffset);
+        scene.add(bubble);
+    }
+
 }
 
 function setupLights(){

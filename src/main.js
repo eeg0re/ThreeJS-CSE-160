@@ -17,8 +17,10 @@ camera.position.z = 2;
 const planeSize = 100;
 
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(0, 5, 0);
+controls.target.set(0, 1, 0);
 controls.update();
+
+const loadManager = new THREE.LoadingManager();
 
 let cube;
 
@@ -37,7 +39,7 @@ function render(time){
     requestAnimationFrame(render);
 }
 
-function makeInstance(geometry, color, x){
+function makeCube(geometry, color, x){
     const material = new THREE.MeshPhongMaterial({color});
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
@@ -46,11 +48,15 @@ function makeInstance(geometry, color, x){
 }
 
 function loadTexture(texturePath){
-    const loader = new THREE.TextureLoader();
+    const loader = new THREE.TextureLoader(loadManager);
     return loader.load(texturePath);
 }
 
 function makeWorld(){
+    const skyboxTexture = loadTexture('/images/skybox.jpg');
+    skyboxTexture.colorSpace = THREE.SRGBColorSpace;
+    scene.background = skyboxTexture;
+
     // set up texture for the ground
     const groundTexture = loadTexture('/images/topGrass.jpg');
     groundTexture.wrapS = THREE.RepeatWrapping;
@@ -82,12 +88,13 @@ function setupLights(){
 
 function main(){
     makeWorld();
-    // add a cube
+
+    // add some cubes
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     cubes = [
-        makeInstance(geometry, 0x44aa88, 0),
-        makeInstance(geometry, 0x8844aa, -2),
-        makeInstance(geometry, 0xaa8844, 2),
+        makeCube(geometry, 0x44aa88, 0),
+        makeCube(geometry, 0x8844aa, -2),
+        makeCube(geometry, 0xaa8844, 2),
     ];
 
     setupLights();

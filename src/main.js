@@ -3,7 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
-const fov = 45;
+const fov = 75;
 const aspect = 2;  // the canvas default
 const near = 0.1;
 const far = 100;
@@ -17,6 +17,7 @@ const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
 const scene = new THREE.Scene();
 let cubes = [];
+let spheres = [];
 
 const planeSize = 100;
 
@@ -37,6 +38,12 @@ function render(time){
         cube.rotation.y = rot;
     });
 
+    spheres.forEach((sphere, ndx) => {
+        const speed = 1 + ndx * 0.05;
+        const rot = time * speed;
+        sphere.rotation.y = rot;
+    });
+
     renderer.render(scene, camera);
 
     requestAnimationFrame(render);
@@ -50,6 +57,29 @@ function makeCube(geometry, color, x, y, z = 0){
     cube.position.y = y;
     cube.position.z = z;
     return cube;
+}
+
+function makeSphere(bubbleMode = false, geometry, texture, x, y, z){
+    let material;
+    if(bubbleMode){
+        material = new THREE.MeshPhongMaterial({
+            color: 0xa6c8ff, 
+            transparent: true, 
+            opacity: 0.4,
+            specular: 0xFFFFFF,
+            shininess: 70,
+        });
+    }
+    else{
+        material = new THREE.MeshPhongMaterial({map: texture});
+    } 
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+    sphere.position.x = x;
+    sphere.position.y = y;
+    sphere.position.z = z;
+    spheres.push(sphere);
+    return sphere;
 }
 
 function loadCubeTexture(texturePathArray){
@@ -128,8 +158,6 @@ function makeWorld(){
     skyboxTexture.colorSpace = THREE.SRGBColorSpace;
     scene.background = skyboxTexture;
 
-    // placeOBJ('/sawfish/21864_Sawfish_v1.obj', '/sawfish/Blank.mtl');
-
     // set up texture for the ground
     const groundTexture = loadTexture('texture' ,'/images/topGrass.jpg');
     groundTexture.wrapS = THREE.RepeatWrapping;
@@ -147,13 +175,22 @@ function makeWorld(){
     scene.add(planeMesh);
 
     makeFishTank();
+
+    const spheresGeo = new THREE.SphereGeometry(1, 32, 32);
+    const globeTexture = loadTexture('texture', '/images/globe.jpg');
+    const globe = makeSphere(false, spheresGeo, globeTexture, 10, 3, 0);
+    scene.add(globe);
+
+    const bubbleGeo = new THREE.SphereGeometry(1, 32, 32);
+    const bubble = makeSphere(true, bubbleGeo, globeTexture, -10, 3, 0);
+    scene.add(bubble);
 }
 
 function setupLights(){
     const directColor = 0xFFFFFF;
     const intensity = 1;
     const directLight = new THREE.DirectionalLight(directColor, intensity);
-    directLight.position.set(-1, 2, 4);
+    directLight.position.set(-1, 10, 4);
     scene.add(directLight);
 
     const ambientColor = 0xffae99;

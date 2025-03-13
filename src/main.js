@@ -117,8 +117,8 @@ function makeFishTank(){
     const topGeometry = new THREE.BoxGeometry(12.1, 2, 7.1);
     const aquariumTop = makeCube(topGeometry, 0xAAAAAA, 0, 8.1, -5);
 
-    const bottomGeometry = new THREE.BoxGeometry(12.1, 2.7, 7.1);
-    const aquariumBottom = makeCube(bottomGeometry, 0xAAAAAA, 0, 1.1, -5);
+    const bottomGeometry = new THREE.BoxGeometry(12.1, 2.5, 7.1);
+    const aquariumBottom = makeCube(bottomGeometry, 0xAAAAAA, 0, 1.2, -5);
 
     return;
 }

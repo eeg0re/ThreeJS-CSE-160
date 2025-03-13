@@ -194,7 +194,8 @@ function makeWorld(){
         let xOffset = Math.random() * 75;
         let yOffset = Math.random() * 10;
         let zOffset = Math.random() * 100;
-        const bubble = makeSphere(true, bubbleGeo, globeTexture, -25 + xOffset, 2+ yOffset, -50 + zOffset);
+        const bubbleMode = Math.random() < 0.85; // 15% chance of being a globe
+        const bubble = makeSphere(bubbleMode, bubbleGeo, globeTexture, -25 + xOffset, 2+ yOffset, -50 + zOffset);
         scene.add(bubble);
     }
 

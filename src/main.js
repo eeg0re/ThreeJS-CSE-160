@@ -15,7 +15,7 @@ const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({canvas});
 const scene = new THREE.Scene();
 let cubes = [];
-camera.position.z = 2;
+camera.position.z = 3;
 const planeSize = 100;
 
 const controls = new OrbitControls(camera, canvas);
@@ -24,7 +24,6 @@ controls.update();
 
 const loadManager = new THREE.LoadingManager();
 
-let cube;
 
 function render(time){
     time *= 0.001;  // convert time to seconds
@@ -41,16 +40,24 @@ function render(time){
     requestAnimationFrame(render);
 }
 
-function makeCube(geometry, color, x){
+function makeCube(geometry, color, x, y){
     const material = new THREE.MeshPhongMaterial({color});
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
     cube.position.x = x;
+    cube.position.y = y;
     return cube;
 }
 
-function loadTexture(texturePath){
-    const loader = new THREE.TextureLoader(loadManager);
+function loadCubeTexture(texturePathArray){
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load(texturePathArray);
+    // texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+}
+
+function loadTexture(loaderMode, texturePath){
+    let loader = new THREE.TextureLoader(loadManager);
     return loader.load(texturePath);
 }
 
@@ -70,15 +77,14 @@ function placeOBJ(objPath, mtlPath){
 }
 
 function makeWorld(){
-    const skyboxTexture = loadTexture('/images/skybox.jpg');
-    skyboxTexture.colorSpace = THREE.SRGBColorSpace;
+    const skyboxTexture = loadCubeTexture(['/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg','/images/skybox.jpg']);
+    // skyboxTexture.colorSpace = THREE.SRGBColorSpace;
     scene.background = skyboxTexture;
 
-    placeOBJ('/sawfish/21864_Sawfish_v1.obj', '/sawfish/Blank.mtl');
-
+    // placeOBJ('/sawfish/21864_Sawfish_v1.obj', '/sawfish/Blank.mtl');
 
     // set up texture for the ground
-    const groundTexture = loadTexture('/images/topGrass.jpg');
+    const groundTexture = loadTexture('texture' ,'/images/topGrass.jpg');
     groundTexture.wrapS = THREE.RepeatWrapping;
     groundTexture.wrapT = THREE.RepeatWrapping;
     groundTexture.magFilter = THREE.NearestFilter;
@@ -104,6 +110,12 @@ function setupLights(){
     const ambientColor = 0xffae99;
     const ambientLight = new THREE.AmbientLight(ambientColor, intensity);
     scene.add(ambientLight);
+
+    const skyColor = 0x3fc7fc;
+    const groundColor = 0x4c733e;
+    const hemiIntensity = 0.6;
+    const hemiLight = new THREE.HemisphereLight(skyColor, groundColor, hemiIntensity);
+    scene.add(hemiLight);
 }
 
 function main(){
@@ -112,9 +124,9 @@ function main(){
     // add some cubes
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     cubes = [
-        makeCube(geometry, 0x44aa88, 0),
-        makeCube(geometry, 0x8844aa, -2),
-        makeCube(geometry, 0xaa8844, 2),
+        makeCube(geometry, 0x44aa88, 0, 1),
+        makeCube(geometry, 0x8844aa, -2, 1),
+        makeCube(geometry, 0xaa8844, 2, 1),
     ];
 
     setupLights();

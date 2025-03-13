@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 
 const fov = 45;
 const aspect = 2;  // the canvas default
@@ -52,10 +54,28 @@ function loadTexture(texturePath){
     return loader.load(texturePath);
 }
 
+function placeOBJ(objPath, mtlPath){
+    const mtlLoader = new MTLLoader(loadManager);
+    const objLoader = new OBJLoader(loadManager);
+
+    mtlLoader.load(mtlPath, (mtl) => {
+        mtl.preload();
+        objLoader.setMaterials(mtl);
+    });
+
+    objLoader.load(objPath, (obj) => {
+        obj.position.y = 1;
+        scene.add(obj);
+    });
+}
+
 function makeWorld(){
     const skyboxTexture = loadTexture('/images/skybox.jpg');
     skyboxTexture.colorSpace = THREE.SRGBColorSpace;
     scene.background = skyboxTexture;
+
+    placeOBJ('/sawfish/21864_Sawfish_v1.obj', '/sawfish/Blank.mtl');
+
 
     // set up texture for the ground
     const groundTexture = loadTexture('/images/topGrass.jpg');

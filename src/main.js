@@ -8,6 +8,12 @@ import globeTexturePath from '/assets/globe.jpg';
 import skyboxTexturePath from '/assets/skybox.jpg';
 import topGrassTexturePath from '/assets/topGrass.jpg';
 
+const fishOBJPath = new URL('/assets/Fish/Fish.obj', import.meta.url).href;
+const fishMTLPath = new URL('/assets/Fish/Fish.mtl', import.meta.url).href;
+
+// import fishOBJPath from '/assets/Fish/Fish.obj';
+// import fishMTLPath from '/assets/Fish/Fish.mtl';
+
 const fov = 75;
 const aspect = 2;  // the canvas default
 const near = 0.1;
@@ -212,13 +218,13 @@ function makeFishTank(){
     aquariumLight.position.set(0, 5, -3);
     scene.add(aquariumLight);
 
-    let fish = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', 0, 5, -2.5, 0.055, Math.PI*1.5, 0, 0);
+    let fish = placeOBJ(fishOBJPath, fishMTLPath, 0, 5, -2.5, 0.055, Math.PI*1.5, 0, 0);
     fishes.push(fish);
 
-    let fish2 = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', 2, 5, -2, 0.05, Math.PI*1.5, 0, 0);
+    let fish2 = placeOBJ(fishOBJPath, fishMTLPath, 2, 5, -2, 0.05, Math.PI*1.5, 0, 0);
     fishes.push(fish2);
 
-    let fish3 = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', -2, 5, -2.2, 0.048, Math.PI*1.5, 0, 0);
+    let fish3 = placeOBJ(fishOBJPath, fishMTLPath, -2, 5, -2.2, 0.048, Math.PI*1.5, 0, 0);
     fishes.push(fish3);
 
     return;

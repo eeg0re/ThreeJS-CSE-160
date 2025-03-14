@@ -128,6 +128,7 @@ function makeFishTank(){
     const geometry = new THREE.BoxGeometry(10, 5, 5);
     const material = new THREE.MeshBasicMaterial({map: aquariumTexture, side: THREE.DoubleSide});
     const water = new THREE.Mesh(geometry, material);
+    water.scale.x = 1.45;
     water.position.x = 0;
     water.position.y = 5;
     water.position.z = -6.2;

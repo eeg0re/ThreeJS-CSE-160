@@ -173,6 +173,12 @@ function makeFishTank(){
     aquariumBottom.scale.z = 1.51;
     aquariumBottom.position.y = 1.3;
 
+    const aquariumLightColor = 0xFFFFFF;
+    const aquariumLightIntensity = 0.5;
+    const aquariumLight = new THREE.PointLight(aquariumLightColor, aquariumLightIntensity);
+    aquariumLight.position.set(0, 5, -3);
+    scene.add(aquariumLight);
+
     return;
 }
 
@@ -218,6 +224,8 @@ function makeWorld(){
 
     makeFishTank();
 
+    // placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl');
+
     makeBubbles(30);
 
 }
@@ -229,15 +237,9 @@ function setupLights(){
     directLight.position.set(-1, 10, 4);
     scene.add(directLight);
 
-    const ambientColor = 0xffae99;
-    const ambientLight = new THREE.AmbientLight(ambientColor, intensity);
+    const ambientColor = 0x94d2ff;
+    const ambientLight = new THREE.AmbientLight(ambientColor, intensity-0.4);
     scene.add(ambientLight);
-
-    const skyColor = 0x3fc7fc;
-    const groundColor = 0x4c733e;
-    const hemiIntensity = 0.6;
-    const hemiLight = new THREE.HemisphereLight(skyColor, groundColor, hemiIntensity);
-    scene.add(hemiLight);
 }
 
 function main(){

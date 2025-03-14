@@ -2,6 +2,11 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
+// import textures to ensure they're packed with the build
+import aquariumTexturePath from '/assets/aquariumBackground.jpg';
+import globeTexturePath from '/assets/globe.jpg';
+import skyboxTexturePath from '/assets/skybox.jpg';
+import topGrassTexturePath from '/assets/topGrass.jpg';
 
 const fov = 75;
 const aspect = 2;  // the canvas default
@@ -120,7 +125,7 @@ function placeOBJ(objPath, mtlPath){
 }
 
 function makeFishTank(){
-    const aquariumTexture = loadTexture('texture', '/assets/aquariumBackground.jpg');
+    const aquariumTexture = loadTexture('texture', aquariumTexturePath);
     aquariumTexture.wrapS = THREE.RepeatWrapping;
     aquariumTexture.wrapT = THREE.RepeatWrapping;
     aquariumTexture.magFilter = THREE.NearestFilter;
@@ -173,7 +178,7 @@ function makeFishTank(){
 
 function makeBubbles(sphereCount){
     const spheresGeo = new THREE.SphereGeometry(1, 32, 32);
-    const globeTexture = loadTexture('texture', '/assets/globe.jpg');
+    const globeTexture = loadTexture('texture', globeTexturePath);
     const globe = makeSphere(false, spheresGeo, globeTexture, 10, 3, 0);
     scene.add(globe);
 
@@ -191,12 +196,12 @@ function makeBubbles(sphereCount){
 }
 
 function makeWorld(){
-    const skyboxTexture = loadTexture('cube', ['/assets/skybox.jpg','/assets/skybox.jpg','/assets/skybox.jpg','/assets/skybox.jpg','/assets/skybox.jpg','/assets/skybox.jpg']);
+    const skyboxTexture = loadTexture('cube', [skyboxTexturePath,skyboxTexturePath,skyboxTexturePath,skyboxTexturePath,skyboxTexturePath,skyboxTexturePath]);
     skyboxTexture.colorSpace = THREE.SRGBColorSpace;
     scene.background = skyboxTexture;
 
     // set up texture for the ground
-    const groundTexture = loadTexture('texture' ,'/assets/topGrass.jpg');
+    const groundTexture = loadTexture('texture' , topGrassTexturePath);
     groundTexture.wrapS = THREE.RepeatWrapping;
     groundTexture.wrapT = THREE.RepeatWrapping;
     groundTexture.magFilter = THREE.NearestFilter;

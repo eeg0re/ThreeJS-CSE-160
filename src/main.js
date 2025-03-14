@@ -26,6 +26,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
 const scene = new THREE.Scene();
 let cubes = [];
 let spheres = [];
+let pyramids = [];
 let fishes = [];
 
 const planeSize = 100;
@@ -52,26 +53,18 @@ function render(time){
         sphere.rotation.y = rot;
     });
 
+    pyramids.forEach((pyramid, ndx) => {
+        const speed = 1 + ndx * 0.05;
+        const rot = -time * speed;
+        pyramid.rotation.y = rot;
+    });
+
     fishes.forEach((fish, ndx) => {
         const speed = 1 + ndx * .1;
         const rot = time * speed;
         fish.position.x = Math.sin(rot)* 4.5;
         fish.position.y = Math.cos(rot);
     });
-
-    // if(fish){
-    //     fish.position.x = Math.sin(time) * 4.5;
-    //     fish.position.y = Math.cos(time);
-    //     // // flip the fish around when it changes direction
-    //     // if(fish.position.x >= 4.4){
-    //     //     fish.rotation.y = Math.PI;
-    //     //     fish.position.z = -1;
-    //     // }
-    //     // else if(fish.position.x <= -4.4){
-    //     //     fish.rotation.y = 0;
-    //     //     fish.position.z = -4;
-    //     // }
-    // }
 
     renderer.render(scene, camera);
 
@@ -86,6 +79,17 @@ function makeCube(geometry, color, x, y, z = 0){
     cube.position.y = y;
     cube.position.z = z;
     return cube;
+}
+
+function makePyramid(geometry, color, x, y, z){
+    const material = new THREE.MeshPhongMaterial({color});
+    const pyramid = new THREE.Mesh(geometry, material);
+    scene.add(pyramid);
+    pyramid.position.x = x;
+    pyramid.position.y = y;
+    pyramid.position.z = z;
+    pyramids.push(pyramid);
+    return pyramid;
 }
 
 function makeSphere(bubbleMode = false, geometry, texture, x, y, z){
@@ -266,6 +270,11 @@ function makeWorld(){
     groundTexture.repeat.set(repeats, repeats);
     planeMesh.rotation.x = Math.PI * -.5;
     scene.add(planeMesh);
+
+    let pyramidGeo = new THREE.ConeGeometry(1, 2, 4);
+    let pyramid = makePyramid(pyramidGeo, 0x00FF00, 0, 1, 0);
+    pyramid.position.x = -8;
+
 
     makeFishTank();
 

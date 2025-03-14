@@ -23,6 +23,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
 const scene = new THREE.Scene();
 let cubes = [];
 let spheres = [];
+let fishes = [];
 
 const planeSize = 100;
 
@@ -31,7 +32,6 @@ controls.target.set(0, 3, 0);
 controls.update();
 
 const loadManager = new THREE.LoadingManager();
-
 
 function render(time){
     time *= 0.001;  // convert time to seconds
@@ -48,6 +48,27 @@ function render(time){
         const rot = time * speed;
         sphere.rotation.y = rot;
     });
+
+    fishes.forEach((fish, ndx) => {
+        const speed = 1 + ndx * .1;
+        const rot = time * speed;
+        fish.position.x = Math.sin(rot)* 4.5;
+        fish.position.y = Math.cos(rot);
+    });
+
+    // if(fish){
+    //     fish.position.x = Math.sin(time) * 4.5;
+    //     fish.position.y = Math.cos(time);
+    //     // // flip the fish around when it changes direction
+    //     // if(fish.position.x >= 4.4){
+    //     //     fish.rotation.y = Math.PI;
+    //     //     fish.position.z = -1;
+    //     // }
+    //     // else if(fish.position.x <= -4.4){
+    //     //     fish.rotation.y = 0;
+    //     //     fish.position.z = -4;
+    //     // }
+    // }
 
     renderer.render(scene, camera);
 
@@ -109,7 +130,7 @@ function loadTexture(loaderMode, texturePath){
     }
 }
 
-function placeOBJ(objPath, mtlPath){
+function placeOBJ(objPath, mtlPath, x, y, z, scale, rotationX, rotationY, rotationZ){
     const mtlLoader = new MTLLoader(loadManager);
     const objLoader = new OBJLoader(loadManager);
 
@@ -118,10 +139,22 @@ function placeOBJ(objPath, mtlPath){
         objLoader.setMaterials(mtl);
     });
 
+    let object = new THREE.Group(); // Create an empty group to hold the object
     objLoader.load(objPath, (obj) => {
-        obj.position.y = 1;
-        scene.add(obj);
+        obj.position.x = x;
+        obj.position.y = y;
+        obj.position.z = z;
+        obj.scale.x = scale;
+        obj.scale.y = scale;
+        obj.scale.z = scale;
+        obj.rotation.x = rotationX;
+        obj.rotation.y = rotationY;
+        obj.rotation.z = rotationZ;
+        object.add(obj); // Add the loaded object to the group
     });
+
+    scene.add(object); // Add the group to the scene
+    return object; // Return the group so it can be animated
 }
 
 function makeFishTank(){
@@ -179,6 +212,15 @@ function makeFishTank(){
     aquariumLight.position.set(0, 5, -3);
     scene.add(aquariumLight);
 
+    let fish = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', 0, 5, -2.5, 0.055, Math.PI*1.5, 0, 0);
+    fishes.push(fish);
+
+    let fish2 = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', 2, 5, -2, 0.05, Math.PI*1.5, 0, 0);
+    fishes.push(fish2);
+
+    let fish3 = placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl', -2, 5, -2.2, 0.048, Math.PI*1.5, 0, 0);
+    fishes.push(fish3);
+
     return;
 }
 
@@ -223,8 +265,6 @@ function makeWorld(){
     scene.add(planeMesh);
 
     makeFishTank();
-
-    placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl');
 
     makeBubbles(30);
 

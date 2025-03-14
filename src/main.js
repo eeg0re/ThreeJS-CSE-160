@@ -3,7 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 // import textures to ensure they're packed with the build
-import aquariumTexturePath from '/assets/aquariumBackground.jpg';
+import aquariumTexturePath from '/assets/fish.jpg';
 import globeTexturePath from '/assets/globe.jpg';
 import skyboxTexturePath from '/assets/skybox.jpg';
 import topGrassTexturePath from '/assets/topGrass.jpg';

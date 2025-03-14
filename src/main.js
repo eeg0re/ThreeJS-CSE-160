@@ -224,7 +224,7 @@ function makeWorld(){
 
     makeFishTank();
 
-    // placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl');
+    placeOBJ('/assets/Fish/Fish.obj', '/assets/Fish/Fish.mtl');
 
     makeBubbles(30);
 

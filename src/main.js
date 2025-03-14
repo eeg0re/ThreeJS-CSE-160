@@ -8,8 +8,11 @@ import globeTexturePath from '/assets/globe.jpg';
 import skyboxTexturePath from '/assets/skybox.jpg';
 import topGrassTexturePath from '/assets/topGrass.jpg';
 
-const fishOBJPath = new URL('/assets/Fish/fishModel.obj', import.meta.url).href;
-const fishMTLPath = new URL('/assets/Fish/fishModel.mtl', import.meta.url).href;
+// const fishOBJPath = new URL('/assets/Fish/fishModel.obj', import.meta.url).href;
+// const fishMTLPath = new URL('/assets/Fish/fishModel.mtl', import.meta.url).href;
+const fishOBJPath = new URL('../assets/Fish/fishModel.obj', import.meta.url).href;
+const fishMTLPath = new URL('../assets/Fish/fishModel.mtl', import.meta.url).href;
+
 
 // import fishOBJPath from '/assets/Fish/Fish.obj';
 // import fishMTLPath from '/assets/Fish/Fish.mtl';

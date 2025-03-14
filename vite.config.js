@@ -1,7 +1,8 @@
 /**
  * @type {import('vite').UserConfig}
  */
+import { defineConfig } from 'vite';
 
-export default {
-    base: process.env.NODE_ENV === 'production' ? '/ThreeJS-CSE-160/' : '',
-}
+export default defineConfig({
+  base: process.env.NODE_ENV === 'production' ? '/ThreeJS-CSE-160/' : '/',
+});
